@@ -54,11 +54,13 @@ wykres(ax, kalibracja[:, :próbka], kalibracja[:, :g1_średnia_wiersze], vcat(te
 ax = Axis(fig[2, 3], title="grupa2 średnia", backgroundcolor=bkg_col, yticks=kalibracja[:, :próbka], xlabel="absorbancja względna")
 wykres(ax, kalibracja[:, :próbka], kalibracja[:, :g2_średnia_wiersze], vcat(test[:, :g2_s1], test[:, :g2_s2]))
 display(fig)
+save("plot1.png", fig)
 
 fig = Figure()
 ax = Axis(fig[1, 1], title="średnie wartości pomiarów dla krzywej kalibracyjnej", backgroundcolor=bkg_col, yticks=kalibracja[:, :próbka], xlabel="absorbancja względna", ylabel="próbka")
 wykres(ax, kalibracja[:, :próbka], kalibracja[:, :g1g2_średnia_wiersze], vcat(test[:, :g2_s1], test[:, :g2_s2]))
 display(fig)
+save("plot2.png", fig)
 
 #=
 optymalizacja_r2, odrzucanie bez_punktów
