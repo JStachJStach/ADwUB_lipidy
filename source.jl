@@ -36,16 +36,16 @@ function wykres(ax, y, x, test_x)
     linspace = [minimum(skipmissing(vcat(x, test_x))), maximum(skipmissing(vcat(x, test_x)))]
     test_y = test_x .* a .+ b
     scatter!(ax, x, y, markersize=13, color=:lightblue)
-    info = ""
+    info = "Próbki badane:\n"
     test_x_round = collect(skipmissing(round.(test_x, digits=2)))
     test_y_round = collect(skipmissing(round.(test_y, digits=2)))
     for (i, j) in zip(test_x_round, test_y_round)
-        info *= "$i => $j\n"
+        info *= "$i -> $(j)μl\n"
     end
     vlines!(ax, test_x, linewidth=1.2, linestyle=:dash, color=:red, alpha=0.7)
-    lines!(ax, linspace, a .* linspace .+ b, linestyle=(:dash, :dense), label="r²=" * string(round(r2, digits=3)), linewidth=4)
+    lines!(ax, linspace, a .* linspace .+ b, linestyle=(:dash, :dense), label="Krzywa kalibracyjna:\nr²=" * string(round(r2, digits=3)), linewidth=4)
     scatter!(ax, test_x, test_y, markersize=17, marker=:x, color=:red, label=info)
-    axislegend(ax, position=:rb, backgroundcolor=(:white, 0.5))
+    axislegend(ax, position=:rb, backgroundcolor=(:white, 0.5), labelsize=10, patchsize=(7, 7))
 end
 
 bkg_col = :gray95
