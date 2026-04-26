@@ -61,8 +61,8 @@ wykres(ax, kalibracja[:, :próbka], kalibracja[:, :g2_średnia_wiersze], vcat(te
 save("plot1.png", fig)
 
 fig = Figure()
-ax = Axis(fig[1, 1], title="średnie wartości pomiarów dla krzywej kalibracyjnej", backgroundcolor=bkg_col, yticks=kalibracja[:, :próbka], xlabel="absorbancja względna", ylabel="próbka")
-wykres(ax, kalibracja[:, :próbka], kalibracja[:, :g1g2_średnia_wiersze], vcat(test[:, :g2_s1], test[:, :g2_s2]))
+ax = Axis(fig[1, 1], title="Średnie wartości pomiarów dla krzywej kalibracyjnej we wszystkich seriach.\nUwzględniono również średnią z testowych dla grupy2 oraz grupy1 serii1", backgroundcolor=bkg_col, yticks=kalibracja[:, :próbka], xlabel="absorbancja względna", ylabel="próbka")
+wykres(ax, kalibracja[:, :próbka], kalibracja[:, :g1g2_średnia_wiersze], [mean(test[:, :g2_s1]), mean(test[:, :g2_s2]), mean(test[:, :g1_s1])])
 #display(fig)
 save("plot2.png", fig)
 
@@ -88,3 +88,8 @@ wykres(ax, kalibracja[:, :próbka], bez_punktów[:, :g2_s2], test[:, :g2_s2])
 save("plot3.png", fig)
 
 
+bez_punktów[!, :g1g2_średnia_wiersze] = [mean(skipmissing(v)) for v in eachrow(bez_punktów)]
+fig = Figure()
+ax = Axis(fig[1, 1], title="Średnie wartości pomiarów dla krzywej kalibracyjnej we wszystkich seriach.\nUwzględniono również średnią z testowych dla grupy2 oraz grupy1 serii1", backgroundcolor=bkg_col, yticks=kalibracja[:, :próbka], ylabel="próbka")
+wykres(ax, kalibracja[:, :próbka], bez_punktów[:, :g1g2_średnia_wiersze], [mean(test[:, :g2_s1]), mean(test[:, :g2_s2]), mean(test[:, :g1_s1])])
+save("plot4.png", fig)
