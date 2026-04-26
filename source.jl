@@ -67,7 +67,7 @@ wykres(ax, kalibracja[:, :próbka], kalibracja[:, :g2_średnia_wiersze], vcat(te
 save("plot1.png", fig)
 
 fig = Figure()
-ax = Axis(fig[1, 1], title="Średnie wartości pomiarów dla krzywej kalibracyjnej we wszystkich seriach.\nUwzględniono również średnie z testowych dla grupy2 oraz grupy1 serii1", backgroundcolor=bkg_col, yticks=kalibracja[:, :próbka], xlabel="absorbancja względna", ylabel="próbka", ytickformat=v -> ["$(v)μl" for v in kalibracja[:, :próbka]])
+ax = Axis(fig[1, 1], title="Średnie wartości pomiarów dla krzywej kalibracyjnej we wszystkich seriach.\nUwzględniono również średnie z testowych dla grupy2 oraz grupy1 serii1", backgroundcolor=bkg_col, yticks=kalibracja[:, :próbka], xlabel="absorbancja względna", ylabel="próbka", ytickformat=v -> ["$(v)μM" for v in kalibracja[:, :próbka]])
 wykres(ax, kalibracja[:, :próbka], kalibracja[:, :g1g2_średnia_wiersze], [mean(test[:, :g2_s1]), mean(test[:, :g2_s2]), mean(test[:, :g1_s1])])
 #display(fig)
 save("plot2.png", fig)
