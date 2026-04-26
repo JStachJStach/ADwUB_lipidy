@@ -28,6 +28,10 @@ function regresja_liniowa(x, y)
 end
 
 function wykres(ax, y, x, test_x)
+    mask = ismissing.(x)
+    mask = .!mask
+    x = x[mask]
+    y = y[mask]
     a, b, r2 = regresja_liniowa(x, y)
     linspace = [minimum(skipmissing(vcat(x, test_x))), maximum(skipmissing(vcat(x, test_x)))]
     test_y = test_x .* a .+ b
@@ -53,28 +57,34 @@ ax = Axis(fig[1, 3], title="grupa1 średnia", backgroundcolor=bkg_col, yticks=ka
 wykres(ax, kalibracja[:, :próbka], kalibracja[:, :g1_średnia_wiersze], vcat(test[:, :g1_s1], test[:, :g1_s2]))
 ax = Axis(fig[2, 3], title="grupa2 średnia", backgroundcolor=bkg_col, yticks=kalibracja[:, :próbka], xlabel="absorbancja względna")
 wykres(ax, kalibracja[:, :próbka], kalibracja[:, :g2_średnia_wiersze], vcat(test[:, :g2_s1], test[:, :g2_s2]))
-display(fig)
+#display(fig)
 save("plot1.png", fig)
 
 fig = Figure()
 ax = Axis(fig[1, 1], title="średnie wartości pomiarów dla krzywej kalibracyjnej", backgroundcolor=bkg_col, yticks=kalibracja[:, :próbka], xlabel="absorbancja względna", ylabel="próbka")
 wykres(ax, kalibracja[:, :próbka], kalibracja[:, :g1g2_średnia_wiersze], vcat(test[:, :g2_s1], test[:, :g2_s2]))
-display(fig)
+#display(fig)
 save("plot2.png", fig)
 
 #=
-optymalizacja_r2, odrzucanie bez_punktów
+optymalizacja_r2, odrzucanie najmniej dopasowanego punktu
 =#
-#=
+
 function optymalizacja_r2(x, y)
     Int64(maximum(reverse!.([pushfirst!(regresja_liniowa(x[1:end.!=i], y[1:end.!=i]), i) for i in 1:length(x)]))[end])
 end
 
 bez_punktów = DataFrame([[i != optymalizacja_r2(col, kalibracja[:, :próbka]) ? col[i] : missing for i in 1:length(col)] for col in eachcol(kalibracja[:, 1:4])], names(kalibracja[:, 1:4]))
-fig = Figure()
-ax = Axis(fig[1, 1], title="grupa1 seria1", backgroundcolor=bkg_col, yticks=kalibracja[:, :próbka], xlabel="absorbancja względna", ylabel="próbka")
+fig = Figure(size=(800, 800))
+ax = Axis(fig[1, 1], title="grupa1 seria1", backgroundcolor=bkg_col, yticks=kalibracja[:, :próbka], ylabel="próbka")
 wykres(ax, kalibracja[:, :próbka], bez_punktów[:, :g1_s1], test[:, :g1_s1])
-display(fig)
-=#
+ax = Axis(fig[1, 2], title="grupa1 seria2", backgroundcolor=bkg_col, yticks=kalibracja[:, :próbka])
+wykres(ax, kalibracja[:, :próbka], bez_punktów[:, :g1_s2], test[:, :g1_s2])
+ax = Axis(fig[2, 1], title="grupa2 seria1", backgroundcolor=bkg_col, yticks=kalibracja[:, :próbka], xlabel="absorbancja względna", ylabel="próbka")
+wykres(ax, kalibracja[:, :próbka], bez_punktów[:, :g2_s1], test[:, :g2_s1])
+ax = Axis(fig[2, 2], title="grupa2 seria2", backgroundcolor=bkg_col, yticks=kalibracja[:, :próbka], xlabel="absorbancja względna")
+wykres(ax, kalibracja[:, :próbka], bez_punktów[:, :g2_s2], test[:, :g2_s2])
+#display(fig)
+save("plot3.png", fig)
 
 
