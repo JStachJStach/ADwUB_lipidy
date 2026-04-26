@@ -38,8 +38,14 @@ function wykres(ax, y, x, test_x)
     vlines!(ax, test_x, linewidth=1.2, linestyle=:dash, color=:red, alpha=0.7)
     lines!(ax, linspace, a .* linspace .+ b, linestyle=(:dash, :dense), label="r²=" * string(round(r2, digits=3)), linewidth=4)
     scatter!(ax, x, y, markersize=13, color=:lightblue)
-    scatter!(ax, test_x, test_y, markersize=17, marker=:x, color=:red)
-    axislegend(ax, position=:rb, framevisible=false)
+    info = ""
+    test_x = collect(skipmissing(round.(test_x, digits=2)))
+    test_y = collect(skipmissing(round.(test_y, digits=2)))
+    for (i, j) in zip(test_x, test_y)
+        info *= "$i => $j\n"
+    end
+    scatter!(ax, test_x, test_y, markersize=17, marker=:x, color=:red, label=info)
+    axislegend(ax, position=:rb, backgroundcolor=(:white, 0.5))
 end
 
 bkg_col = :gray95
